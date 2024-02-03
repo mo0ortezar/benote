@@ -1,0 +1,59 @@
+version: '3'
+services:
+    nginx:
+        image: nginx:latest
+        container_name: nginx
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - /opt/wp/nginx/conf/benote.ir.conf:/etc/nginx/conf.d/benote.ir.conf
+            - /opt/wp/nginx/logs:/var/log/nginx
+            - /wp/www:/var/www
+            - /opt/wp/nginx/fastcgi.conf:/etc/nginx/fastcgi.conf
+        restart: always
+        #depends_on:
+        #    - benote                
+    phpmyadmin:
+        image: phpmyadmin:latest
+        container_name: phpmyadmin
+        environment:
+            - PMA_HOST=db
+        restart: always
+        ports:
+            - 8080:80
+        volumes:
+            - /opt/wp/phpmyadmin:/sessions
+            - /opt/wp/phpmyadmin/uploads.ini:/usr/local/etc/php/conf.d/php-phpmyadmin.ini
+    db:
+        image: mysql:8.3.0
+        container_name: mysql
+        #command: --default-authentication-plugin=mysql_native_password
+        restart: unless-stopped
+        ports:
+            - '3306:3306'
+        volumes:
+            - /wp/db:/var/lib/mysql
+        environment:
+            #- MYSQL_DATABASE=benote-db
+            #- MYSQL_USER=morteza
+            #- MYSQL_PASSWORD=Mo0orteza
+            - MYSQL_ROOT_PASSWORD=Mo0orteza
+    benote:
+        image: wordpress:6.4.2-php8.1-fpm-alpine
+        links:
+            - db
+        volumes:
+            - /wp/www:/var/www
+            #- /opt/wp/nginx/php.ini:/usr/local/etc/php/conf.d/php.ini:ro
+            - /opt/php.ini:/usr/local/etc/php/conf.d/php.ini:ro   
+        restart: always
+        environment:
+            - WORDPRESS_DB_HOST=db
+            #- WORDPRESS_DB_USER=root
+            - WORDPRESS_DB_PASSWORD=Mo0orteza
+            - WORDPRESS_DB_NAME=benote_db
+            - WORDPRESS_TABLE_PREFIX=wp_
+
+
+
