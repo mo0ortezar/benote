@@ -1,7 +1,7 @@
 # benote
 
 1-
-make folders in docker-compose-wp and ser permission : 
+make folders in docker-compose-wp and set permission : 
 sample : 
 mkdir /wp
 chmod -R 777 /wp
