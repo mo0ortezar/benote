@@ -8,6 +8,7 @@ services:
             - "443:443"
         volumes:
             - /opt/wp/nginx/conf/benote.ir.conf:/etc/nginx/conf.d/benote.ir.conf
+            - /wp/ssl/benote.ir:/etc/nginx/conf.d/ssl
             - /opt/wp/nginx/logs:/var/log/nginx
             - /wp/www:/var/www
             - /opt/wp/nginx/fastcgi.conf:/etc/nginx/fastcgi.conf
